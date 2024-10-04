@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 // navegacion del tab Main
 export default function NavFlight() {
   return (
-    <Stack.Navigator initialRouteName="Destination">
+    <Stack.Navigator initialRouteName="Passengers">
       <Stack.Screen name="Destination" component={Destination}></Stack.Screen>
       <Stack.Screen name="Flights" component={FlightList}></Stack.Screen>
       <Stack.Screen name="Passengers" component={Passenger}></Stack.Screen>

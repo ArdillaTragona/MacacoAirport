@@ -1,15 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,Button } from "react-native";
+import React from "react";
 
-const Passenger = () => {
+const Passenger = ({ navigation }) => {
   return (
     <View>
       <Text>Passenger</Text>
-      <Button onPress={navigator.navigate("Seats")}></Button>
+      <Button
+        title={"Seats selector"}
+        onPress={navigation.navigate("Seats")}
+      ></Button>
     </View>
-  )
-}
+  );
+};
 
-export default Passenger
+export default Passenger;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

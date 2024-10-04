@@ -8,6 +8,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import HomeScreen from "../../screens/TabMain/HomeScreen";
 import TicketScreen from "../../screens/TabMain/TicketScreen";
 import SettingScreen from "../../screens/TabMain/SettingScreen";
+import NavFlight from "./NavFlight";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,7 +48,7 @@ export default function TabMain() {
 
       <Tab.Screen
         name="HomeScreen"
-        component={HomeScreen}
+        component={NavFlight}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,Button } from 'react-native'
 import React from 'react'
 
-const FlightList = () => {
+const FlightList = ({navigation}) => {
   return (
     <View>
       <Text>FlightList</Text>
-      <Button onPress={navigator.navigate("Passengers")}></Button>
+      <Button title={"Passenger selector"} onPress={navigation.navigate("Passengers")}></Button>
     </View>
   )
 }
