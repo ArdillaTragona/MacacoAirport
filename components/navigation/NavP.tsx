@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
 import NavLogin from "./NavLogin";
-import NavMain from "./NavMain";
+import TabMain from "./TabMain";
 
 export default function NavP() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,7 +10,7 @@ export default function NavP() {
   return (
     <NavigationContainer>
       {isAuthenticated ? (
-        <NavMain />
+        <TabMain />
       ) : (
         <NavLogin setIsAuthenticated={setIsAuthenticated} />
       )}
