@@ -29,7 +29,9 @@ export default function NavFlight() {
         name="Destination"
         component={SearchScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: "Search flight",
+          headerTransparent: true,
         }}
       ></Stack.Screen>
       <Stack.Screen
@@ -48,7 +50,7 @@ export default function NavFlight() {
         options={{
           animationEnabled: true,
           headerBackImage: () => backArrow,
-          headerTitle: "",
+          headerTitle: "Passenger data",
           headerTransparent: true,
         }}
       ></Stack.Screen>
