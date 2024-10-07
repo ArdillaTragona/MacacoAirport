@@ -7,7 +7,7 @@ const Destination = ({ navigation }) => {
       <Text>Destination</Text>
       <Button
         title={"Search flights"}
-        onPress={navigation.navigate("Flights")}
+        onPress={()=>navigation.navigate("Flights")}
       ></Button>
     </View>
   );

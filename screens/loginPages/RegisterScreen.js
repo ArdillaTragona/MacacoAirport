@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 export default function RegisterScreen({ setIsAuthenticated, navigation }) {
@@ -22,6 +23,11 @@ export default function RegisterScreen({ setIsAuthenticated, navigation }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        barStyle="light-content" // Contenido de la barra en color claro
+        backgroundColor="transparent" // Fondo transparente
+        translucent={true} // Permite que el contenido debajo de la barra de estado sea visible
+      />
       <ImageBackground /* Imagen de fondo */
         source={require("../../assets/images/WallpaperBlue.png")} // Ruta de la imagen de fondo
         style={styles.backgroundImage} // Estilo para el ImageBackground

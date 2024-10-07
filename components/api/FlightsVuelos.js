@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Button,
@@ -11,6 +11,15 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+const Counter = ({ type, count, increment, decrement }) => (
+  <View style={styles.counterContainer}>
+    <Text>{type}</Text>
+    <Button title="-" onPress={decrement} />
+    <Text>{count}</Text>
+    <Button title="+" onPress={increment} />
+  </View>
+);
+
 const SearchScreen = ({ navigation }) => {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -18,82 +27,60 @@ const SearchScreen = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [departureTime, setDepartureTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [travelerType, setTravelerType] = useState("ADULT");
-  const [showTravelerModal, setShowTravelerModal] = useState(false);
   const [adultCount, setAdultCount] = useState(1);
   const [childCount, setChildCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
+  const [showTravelerModal, setShowTravelerModal] = useState(false);
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  };
+  const formatDate = (date) => date.toISOString().split("T")[0];
+  const formatTime = (date) =>
+    date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const handleSearch = () => {
-    if (!origin || !destination || !departureDate || !departureTime) {
+    if (!origin || !destination) {
       alert("Por favor ingresa todos los datos.");
       return;
     }
-
-    navigation.navigate("Results", {
+    // Navegamos a la screen "Flights" y pasamos los parámetros
+    navigation.navigate("Flights", {
       origin,
       destination,
       departureDate: formatDate(departureDate),
       departureTime: formatTime(departureTime),
-      travelerType: `${adultCount} Adultos, ${childCount} Niños, ${infantCount} Infantes`,
+      travelerType: {
+        adults: adultCount,
+        children: childCount,
+        infants: infantCount,
+      },
     });
   };
 
-  const showCalendar = () => {
-    setShowDatePicker(true);
-  };
+  const handleTravelerModal = () => setShowTravelerModal(true);
+  const closeTravelerModal = () => setShowTravelerModal(false);
 
-  const showTimeSelector = () => {
-    setShowTimePicker(true);
-  };
-
-  const handleTravelerModal = () => {
-    setShowTravelerModal(true);
-  };
-
-  const closeTravelerModal = () => {
-    setShowTravelerModal(false);
-  };
-
-  const incrementCount = (type) => {
+  const changeCount = useCallback((type, operation) => {
     if (type === "ADULT") {
-      setAdultCount(adultCount + 1);
+      setAdultCount((prev) =>
+        operation === "increment" ? prev + 1 : Math.max(prev - 1, 1)
+      );
     } else if (type === "CHILD") {
-      setChildCount(childCount + 1);
+      setChildCount((prev) =>
+        operation === "increment" ? prev + 1 : Math.max(prev - 1, 0)
+      );
     } else if (type === "INFANT") {
-      setInfantCount(infantCount + 1);
+      setInfantCount((prev) =>
+        operation === "increment" ? prev + 1 : Math.max(prev - 1, 0)
+      );
     }
-  };
-
-  const decrementCount = (type) => {
-    if (type === "ADULT" && adultCount > 1) {
-      setAdultCount(adultCount - 1);
-    } else if (type === "CHILD" && childCount > 0) {
-      setChildCount(childCount - 1);
-    } else if (type === "INFANT" && infantCount > 0) {
-      setInfantCount(infantCount - 1);
-    }
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
-      {/* Menú desplegable para origen */}
+      {/* Origen */}
       <Text>Origen</Text>
       <Picker
         selectedValue={origin}
-        onValueChange={(itemValue) => setOrigin(itemValue)}
+        onValueChange={setOrigin}
         style={styles.input}
       >
         <Picker.Item label="Selecciona el origen" value="" />
@@ -101,11 +88,11 @@ const SearchScreen = ({ navigation }) => {
         <Picker.Item label="Aguascalientes (AGU)" value="AGU" />
       </Picker>
 
-      {/* Menú desplegable para destino */}
+      {/* Destino */}
       <Text>Destino</Text>
       <Picker
         selectedValue={destination}
-        onValueChange={(itemValue) => setDestination(itemValue)}
+        onValueChange={setDestination}
         style={styles.input}
       >
         <Picker.Item label="Selecciona el destino" value="" />
@@ -113,15 +100,14 @@ const SearchScreen = ({ navigation }) => {
         <Picker.Item label="Ciudad de México (MEX)" value="MEX" />
       </Picker>
 
-      {/* Campo de fecha con ícono */}
+      {/* Fecha de salida */}
       <Text>Fecha de salida</Text>
       <View style={styles.datePickerContainer}>
         <Text>{formatDate(departureDate)}</Text>
-        <TouchableOpacity onPress={showCalendar}>
+        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
           <Icon name="calendar-today" size={30} color="gray" />
         </TouchableOpacity>
       </View>
-
       {showDatePicker && (
         <DateTimePicker
           value={departureDate}
@@ -129,20 +115,19 @@ const SearchScreen = ({ navigation }) => {
           display="default"
           onChange={(event, selectedDate) => {
             setShowDatePicker(false);
-            setDepartureDate(selectedDate || departureDate);
+            if (selectedDate) setDepartureDate(selectedDate);
           }}
         />
       )}
 
-      {/* Campo de hora con ícono */}
+      {/* Hora de salida */}
       <Text>Hora de salida</Text>
       <View style={styles.datePickerContainer}>
         <Text>{formatTime(departureTime)}</Text>
-        <TouchableOpacity onPress={showTimeSelector}>
+        <TouchableOpacity onPress={() => setShowTimePicker(true)}>
           <Icon name="access-time" size={30} color="gray" />
         </TouchableOpacity>
       </View>
-
       {showTimePicker && (
         <DateTimePicker
           value={departureTime}
@@ -151,7 +136,7 @@ const SearchScreen = ({ navigation }) => {
           is24Hour={true}
           onChange={(event, selectedTime) => {
             setShowTimePicker(false);
-            setDepartureTime(selectedTime || departureTime);
+            if (selectedTime) setDepartureTime(selectedTime);
           }}
         />
       )}
@@ -162,7 +147,7 @@ const SearchScreen = ({ navigation }) => {
         <Text>{`${adultCount} Adultos, ${childCount} Niños, ${infantCount} Infantes`}</Text>
       </TouchableOpacity>
 
-      {/* Modal para seleccionar el tipo de viajero */}
+      {/* Modal de viajeros */}
       <Modal
         transparent={true}
         animationType="slide"
@@ -171,27 +156,24 @@ const SearchScreen = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Adultos</Text>
-            <View style={styles.counterContainer}>
-              <Button title="-" onPress={() => decrementCount("ADULT")} />
-              <Text>{adultCount}</Text>
-              <Button title="+" onPress={() => incrementCount("ADULT")} />
-            </View>
-
-            <Text>Niños</Text>
-            <View style={styles.counterContainer}>
-              <Button title="-" onPress={() => decrementCount("CHILD")} />
-              <Text>{childCount}</Text>
-              <Button title="+" onPress={() => incrementCount("CHILD")} />
-            </View>
-
-            <Text>Infantes</Text>
-            <View style={styles.counterContainer}>
-              <Button title="-" onPress={() => decrementCount("INFANT")} />
-              <Text>{infantCount}</Text>
-              <Button title="+" onPress={() => incrementCount("INFANT")} />
-            </View>
-
+            <Counter
+              type="Adultos"
+              count={adultCount}
+              increment={() => changeCount("ADULT", "increment")}
+              decrement={() => changeCount("ADULT", "decrement")}
+            />
+            <Counter
+              type="Niños"
+              count={childCount}
+              increment={() => changeCount("CHILD", "increment")}
+              decrement={() => changeCount("CHILD", "decrement")}
+            />
+            <Counter
+              type="Infantes"
+              count={infantCount}
+              increment={() => changeCount("INFANT", "increment")}
+              decrement={() => changeCount("INFANT", "decrement")}
+            />
             <Button title="Aceptar" onPress={closeTravelerModal} />
           </View>
         </View>

@@ -1,15 +1,27 @@
-import { StyleSheet, Text, View,Button } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
 
-const FlightList = ({navigation}) => {
+const FlightList = ({ route, navigation }) => {
+  // Desestructura los parámetros enviados desde SearchScreen
+  const { origin, destination, departureDate, departureTime, travelerType } =
+    route.params;
+
+  const sendData = () => {
+    navigation.navigate("Passenger", {
+      origin,
+      destination,
+      departureDate,
+      departureTime,
+      travelerType,
+    });
+  };
+  
   return (
     <View>
-      <Text>FlightList</Text>
-      <Button title={"Passenger selector"} onPress={navigation.navigate("Passengers")}></Button>
+      {/* Botón para navegar a la pantalla Passenger */}
+      <Button title="Continuar a Pasajeros" onPress={sendData} />
     </View>
-  )
-}
+  );
+};
 
-export default FlightList
-
-const styles = StyleSheet.create({})
+export default FlightList;

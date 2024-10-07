@@ -5,9 +5,9 @@ import React from "react";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import HomeScreen from "../../screens/TabMain/HomeScreen";
 import TicketScreen from "../../screens/TabMain/TicketScreen";
 import SettingScreen from "../../screens/TabMain/SettingScreen";
+import HomeHeader from "../headers/HomeHeader";
 import NavFlight from "./NavFlight";
 
 const Tab = createBottomTabNavigator();
@@ -17,6 +17,7 @@ export default function TabMain() {
     <Tab.Navigator
       initialRouteName="HomeScreen"
       screenOptions={{
+        headerShown: true,
         tabBarInactiveTintColor: "#7A7A7A",
         tabBarActiveTintColor: "#2EABFFFF",
 
@@ -38,7 +39,7 @@ export default function TabMain() {
         name="TicketScreen"
         component={TicketScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="ticket" size={24} color={color} />
           ),
@@ -50,7 +51,8 @@ export default function TabMain() {
         name="HomeScreen"
         component={NavFlight}
         options={{
-          headerShown: false,
+          headerShown: true,
+          header:()=><HomeHeader/>,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="airplane" size={size} color={color} />
           ),
@@ -62,7 +64,7 @@ export default function TabMain() {
         name="Settings"
         component={SettingScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="account-settings"
