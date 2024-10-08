@@ -14,6 +14,8 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Passenger from "../../screens/StackFlight/3_Passenger";
 import Payment from "../../screens/StackFlight/5_Payment";
 import ResultsScreen from "../api/ResultFligths";
+import FlightSearchScreen from "../apiGera/FlightSearchScreen";
+import FlightResultsScreen from "../apiGera/FlightResultsScreen";
 
 const backArrow = (
   <MaterialCommunityIcons name="arrow-left" size={24} color="#61B3FFFF" />
@@ -27,7 +29,7 @@ export default function NavFlight() {
     <Stack.Navigator initialRouteName="Destination">
       <Stack.Screen
         name="Destination"
-        component={SearchScreen}
+        component={FlightSearchScreen}
         options={{
           headerShown: true,
           headerTitle: "Search flight",
@@ -36,7 +38,7 @@ export default function NavFlight() {
       ></Stack.Screen>
       <Stack.Screen
         name="Flights"
-        component={FlightList}
+        component={FlightResultsScreen}
         options={{
           animationEnabled: true,
           headerBackImage: () => backArrow,

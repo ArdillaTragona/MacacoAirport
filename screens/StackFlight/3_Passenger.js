@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 const Passenger = ({ navigation }) => {
@@ -49,19 +56,25 @@ const Passenger = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* <Text>Origen: {origin}</Text>
+    <View style={{ flex: 1, marginTop: 40 }}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={styles.container}
+      >
+        {/* <Text>Origen: {origin}</Text>
       <Text>Destino: {destination}</Text>
       <Text>Adultos: {travelerType.adults}</Text>
       <Text>Niños: {travelerType.children}</Text>
       <Text>Infantes: {travelerType.infants}</Text> */}
-
-      {renderForm(travelerType.adults, "Adulto", "adults")}
-      {renderForm(travelerType.children, "Niño", "children")}
-      {renderForm(travelerType.infants, "Infante", "infants")}
-
+        <View>
+          {renderForm(travelerType.adults, "Adulto", "adults")}
+          {renderForm(travelerType.children, "Niño", "children")}
+          {renderForm(travelerType.infants, "Infante", "infants")}
+        </View>
+      </ScrollView>
       <Button
-        title={"Passenger selector"}
+        title={"Confirm information"}
+        style={styles.boton}
         onPress={() => navigation.navigate("Seats")}
       />
     </View>
@@ -76,26 +89,32 @@ const styles = StyleSheet.create({
   },
   containerForm: {
     width: "100%",
-    borderWidth: 4,
     borderRadius: 20,
-    padding: 20,
-    marginTop: 10,
+    borderWidth: 4,
+    padding: 15,
+    marginBottom: 10,
+    //backgroundColor: "#2EABFFFF",
   },
   input: {
     width: 150,
     padding: 5,
     paddingLeft: 15,
-    borderWidth: 2,
+    borderWidth: 3,
     borderRadius: 15,
   },
   formEncabezado: {
     fontSize: 14,
     marginBottom: 10,
     fontWeight: "bold",
+    color: "#000000FF",
   },
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  boton: {
+    position: "absolute",
+    bottom: 0,
   },
 });
 
