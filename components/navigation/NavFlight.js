@@ -31,7 +31,7 @@ export default function NavFlight() {
         name="Destination"
         component={FlightSearchScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: "Search flight",
           headerTransparent: true,
         }}
