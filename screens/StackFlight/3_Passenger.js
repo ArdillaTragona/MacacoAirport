@@ -11,14 +11,20 @@ import { useRoute } from "@react-navigation/native";
 
 const Passenger = ({ navigation }) => {
   const route = useRoute();
-  const { origin, destination, departureDate, departureTime, travelerType } =
-    route.params;
+  const {
+    origin,
+    destination,
+    departureDate,
+    returnDate,
+    adults,
+    children,
+    classOfService,
+  } = route.params;
 
   // Estado para almacenar nombres y apellidos de cada pasajero
   const [passengers, setPassengers] = useState({
-    adults: Array(travelerType.adults).fill({ name: "", lastName: "" }),
-    children: Array(travelerType.children).fill({ name: "", lastName: "" }),
-    infants: Array(travelerType.infants).fill({ name: "", lastName: "" }),
+    adults: Array(adults).fill({ name: "", lastName: "" }),
+    children: Array(children).fill({ name: "", lastName: "" }),
   });
 
   // Manejar el cambio de texto para un pasajero específico
@@ -61,21 +67,29 @@ const Passenger = ({ navigation }) => {
         contentContainerStyle={{ flexGrow: 1 }}
         style={styles.container}
       >
-        {/* <Text>Origen: {origin}</Text>
-      <Text>Destino: {destination}</Text>
-      <Text>Adultos: {travelerType.adults}</Text>
-      <Text>Niños: {travelerType.children}</Text>
-      <Text>Infantes: {travelerType.infants}</Text> */}
+        <Text>Origen: {origin}</Text>
+        <Text>Destino: {destination}</Text>
+        <Text>Fecha de salida: {departureDate}</Text>
+        <Text>Fecha de regreso: {returnDate}</Text>
+        <Text>Clase: {classOfService}</Text>
         <View>
-          {renderForm(travelerType.adults, "Adulto", "adults")}
-          {renderForm(travelerType.children, "Niño", "children")}
-          {renderForm(travelerType.infants, "Infante", "infants")}
+          {renderForm(adults, "Adulto", "adults")}
+          {renderForm(children, "Niño", "children")}
         </View>
       </ScrollView>
       <Button
         title={"Confirm information"}
         style={styles.boton}
-        onPress={() => navigation.navigate("Seats")}
+        onPress={() =>
+          navigation.navigate("Seats", {
+            origin,
+            destination,
+            departureDate,
+            returnDate,
+            classOfService,
+            passengers,
+          })
+        }
       />
     </View>
   );
@@ -93,7 +107,6 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     padding: 15,
     marginBottom: 10,
-    //backgroundColor: "#2EABFFFF",
   },
   input: {
     width: 150,

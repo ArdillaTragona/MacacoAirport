@@ -1,3 +1,7 @@
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import airports from "../data/airports"; //Data de aeropuertos y codigos IATA
@@ -87,196 +91,229 @@ const FlightSearchScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={{ backgroundColor: "white", borderRadius: 30, padding: 30 }}
+      <View
+        style={{
+          backgroundColor: "white",
+          borderRadius: 30,
+          overflow: "hidden",
+          shadowColor: "#000000FF",
+          shadowOpacity: 1,
+          shadowRadius: 10,
+          elevation: 10,
+        }}
       >
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 23,
-            marginBottom: 10,
-            color: "#16B5FFFF",
-          }}
-        >
-          Flight search
-        </Text>
-
         <View
           style={{
-            flexDirection: "row",
-            width: "%100",
-            gap: 10,
+            width: "100%",
+            backgroundColor: "#16B5FFFF",
+            height: 60,
+            justifyContent: "center",
+            paddingLeft: 30,
+            paddingTop: 10,
           }}
         >
-          <View>
-            <Text style={styles.DetailText}>Departure</Text>
-            <Picker
-              style={styles.input}
-              selectedValue={flightDetails.origin}
-              onValueChange={(value) => handleChange("origin", value)}
-            >
-              {airports.map((airport) => (
-                <Picker.Item
-                  key={airport.code}
-                  label={`${airport.city}`}
-                  value={airport.code}
-                />
-              ))}
-            </Picker>
-          </View>
-
-          <View>
-            <Text style={styles.DetailText}>Return</Text>
-            <Picker
-              style={styles.input}
-              selectedValue={flightDetails.destination}
-              onValueChange={(value) => handleChange("destination", value)}
-            >
-              {airports.map((airport) => (
-                <Picker.Item
-                  key={airport.code}
-                  label={`${airport.city}`}
-                  value={airport.code}
-                />
-              ))}
-            </Picker>
-          </View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 23,
+              marginBottom: 10,
+              color: "white",
+            }}
+          >
+            Flight search
+          </Text>
         </View>
+        <ScrollView style={{ padding: 30, paddingTop: 10 }}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 23,
+              marginBottom: 10,
+              marginTop: 15,
+              color: "#16B5FFFF",
+            }}
+          >
+            Flight Data
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "%100",
+              gap: 10,
+            }}
+          >
+            <View>
+              <Text style={styles.DetailText}>Departure</Text>
+              <Picker
+                style={styles.input}
+                selectedValue={flightDetails.origin}
+                onValueChange={(value) => handleChange("origin", value)}
+              >
+                {airports.map((airport) => (
+                  <Picker.Item
+                    key={airport.code}
+                    label={`${airport.city}`}
+                    value={airport.code}
+                  />
+                ))}
+              </Picker>
+            </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            width: "%100",
-            gap: 10,
-          }}
-        >
-          <View>
-            <Text style={styles.DetailText}>Departure Date</Text>
-
-            <TouchableOpacity
-              onPress={() => setActivePicker("departure")}
-              style={styles.inputDate}
-            >
-              <Text style={{ fontSize: 16, color: "#3A3A3AFF" }}>
-                {flightDetails.departureDate.toDateString()}
-              </Text>
-            </TouchableOpacity>
+            <View>
+              <Text style={styles.DetailText}>Return</Text>
+              <Picker
+                style={styles.input}
+                selectedValue={flightDetails.destination}
+                onValueChange={(value) => handleChange("destination", value)}
+              >
+                {airports.map((airport) => (
+                  <Picker.Item
+                    key={airport.code}
+                    label={`${airport.city}`}
+                    value={airport.code}
+                  />
+                ))}
+              </Picker>
+            </View>
           </View>
 
-          <View>
-            <Text style={styles.DetailText}>Return Date</Text>
-            <TouchableOpacity
-              onPress={() => setActivePicker("return")}
-              style={styles.inputDate}
-            >
-              <Text style={{ fontSize: 16, color: "#3A3A3AFF" }}>
-                {flightDetails.returnDate
-                  ? `${flightDetails.returnDate.toDateString()}`
-                  : "Select return date"}
-              </Text>
-            </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              width: "%100",
+              gap: 10,
+            }}
+          >
+            <View>
+              <Text style={styles.DetailText}>Departure Date</Text>
+
+              <TouchableOpacity
+                onPress={() => setActivePicker("departure")}
+                style={styles.inputDate}
+              >
+                <Text style={{ fontSize: 16, color: "#3A3A3AFF" }}>
+                  {flightDetails.departureDate.toDateString()}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <Text style={styles.DetailText}>Return Date</Text>
+              <TouchableOpacity
+                onPress={() => setActivePicker("return")}
+                style={styles.inputDate}
+              >
+                <Text style={{ fontSize: 16, color: "#3A3A3AFF" }}>
+                  {flightDetails.returnDate
+                    ? `${flightDetails.returnDate.toDateString()}`
+                    : "Select return date"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        {/* Botón para limpiar la fecha de regreso */}
-        {flightDetails.returnDate && (
-          <Button title="Delete return date" onPress={clearReturnDate} />
-        )}
+          {/* Botón para limpiar la fecha de regreso */}
+          {flightDetails.returnDate && (
+            <Button title="Delete return date" onPress={clearReturnDate} />
+          )}
 
-        <View
-          style={{
-            height: 2,
-            backgroundColor: "#0CB2FFFF",
-            marginTop: 20,
-            marginBottom: 20,
-          }}
-        ></View>
+          <View
+            style={{
+              height: 2,
+              backgroundColor: "#0CB2FFFF",
+              marginTop: 20,
+              marginBottom: 20,
+            }}
+          ></View>
 
-        <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 23,
-            marginBottom: 10,
-            marginTop: 15,
-            color: "#16B5FFFF",
-          }}
-        >
-          Passengers
-        </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 23,
+              marginBottom: 10,
+              marginTop: 15,
+              color: "#16B5FFFF",
+            }}
+          >
+            Passengers
+          </Text>
 
-        {/* Mostrar DateTimePicker basado en el picker activo */}
-        {activePicker && (
-          <DateTimePicker
-            value={
-              flightDetails[
-                activePicker === "departure" ? "departureDate" : "returnDate"
-              ] || new Date()
+          {/* Mostrar DateTimePicker basado en el picker activo */}
+          {activePicker && (
+            <DateTimePicker
+              value={
+                flightDetails[
+                  activePicker === "departure" ? "departureDate" : "returnDate"
+                ] || new Date()
+              }
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
+
+          <View
+            style={{
+              flexDirection: "row",
+              width: "%100",
+              gap: 10,
+            }}
+          >
+            <View>
+              <Text style={styles.DetailText}>Number of adults</Text>
+              <Picker
+                selectedValue={flightDetails.adults}
+                onValueChange={(itemValue) => handleChange("adults", itemValue)}
+                style={styles.input}
+              >
+                {[1, 2, 3, 4, 5, 6].map((num) => (
+                  <Picker.Item key={num} label={`${num}`} value={num} />
+                ))}
+              </Picker>
+            </View>
+
+            <View>
+              <Text style={styles.DetailText}>Number of children</Text>
+              <Picker
+                selectedValue={flightDetails.children}
+                onValueChange={(itemValue) =>
+                  handleChange("children", itemValue)
+                }
+                style={styles.input}
+              >
+                {[0, 1, 2, 3, 4, 5].map((num) => (
+                  <Picker.Item key={num} label={`${num}`} value={num} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+
+          {/* Clase de servicio */}
+          <Text style={styles.DetailText}>Service class</Text>
+          <Picker
+            selectedValue={flightDetails.classOfService}
+            onValueChange={(itemValue) =>
+              handleChange("classOfService", itemValue)
             }
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-          />
-        )}
+            style={{
+              backgroundColor: "#FDFDFDFF",
+              color: "#3A3A3AFF",
+              shadowColor: "#000",
+              shadowOpacity: 0.2,
+              shadowRadius: 5,
+              elevation: 2,
+            }}
+          >
+            <Picker.Item label="Economy" value="ECONOMY" />
+            <Picker.Item label="Business" value="BUSINESS" />
+            <Picker.Item label="First Class" value="FIRST" />
+          </Picker>
 
-        <View
-          style={{
-            flexDirection: "row",
-            width: "%100",
-            gap: 10,
-          }}
-        >
-          <View>
-            <Text style={styles.DetailText}>Number of adults</Text>
-            <Picker
-              selectedValue={flightDetails.adults}
-              onValueChange={(itemValue) => handleChange("adults", itemValue)}
-              style={styles.input}
-            >
-              {[1, 2, 3, 4, 5, 6].map((num) => (
-                <Picker.Item key={num} label={`${num}`} value={num} />
-              ))}
-            </Picker>
-          </View>
-
-          <View>
-            <Text style={styles.DetailText}>Number of children</Text>
-            <Picker
-              selectedValue={flightDetails.children}
-              onValueChange={(itemValue) => handleChange("children", itemValue)}
-              style={styles.input}
-            >
-              {[0, 1, 2, 3, 4, 5].map((num) => (
-                <Picker.Item key={num} label={`${num}`} value={num} />
-              ))}
-            </Picker>
-          </View>
-        </View>
-
-        {/* Clase de servicio */}
-        <Text style={styles.DetailText}>Service class</Text>
-        <Picker
-          selectedValue={flightDetails.classOfService}
-          onValueChange={(itemValue) =>
-            handleChange("classOfService", itemValue)
-          }
-          style={{
-            backgroundColor: "#FDFDFDFF",
-            color: "#3A3A3AFF",
-            shadowColor: "#000",
-            shadowOpacity: 0.2,
-            shadowRadius: 5,
-            elevation: 2,
-          }}
-        >
-          <Picker.Item label="Economy" value="ECONOMY" />
-          <Picker.Item label="Business" value="BUSINESS" />
-          <Picker.Item label="First Class" value="FIRST" />
-        </Picker>
-
-        <TouchableOpacity style={styles.searchButton} onPress={searchFlights}>
-          <Text style={styles.searchButtonText}>Search flight</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity style={styles.searchButton} onPress={searchFlights}>
+            <Text style={styles.searchButtonText}>Search flight</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -287,6 +324,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0D253BFF",
     flex: 1,
     paddingVertical: 60,
+    justifyContent: "center",
   },
 
   input: {
@@ -296,12 +334,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 2,
-    width: 145,
+    width: wp(34), // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: hp(5), // Esto establece la altura del componente como el 10% de la altura de la pantalla
   },
 
   inputDate: {
-    height: 50,
-    width: 145,
+    width: wp(34), // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: hp(5), // Esto establece la altura del componente como el 10% de la altura de la pantalla
     justifyContent: "center",
     paddingLeft: 17,
     backgroundColor: "#FFFFFF",
