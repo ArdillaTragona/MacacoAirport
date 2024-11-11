@@ -277,7 +277,7 @@ const FlightResultsScreen = ({ route, navigation }) => {
               <Text style={styles.stopoversTitle}>Escalas de Salida:</Text>
               {outboundSegments.slice(1).map((segment, index) => (
                 <Text key={index} style={styles.stopover}>
-                  Escala {index + 1}: de{" "}
+                  Escala {index + 1}:{" "}
                   {iataToCity[segment.departure?.iataCode] ||
                     segment.departure?.iataCode ||
                     "Desconocido"}{" "}
@@ -521,15 +521,14 @@ const styles = StyleSheet.create({
   stopovers: {
     marginTop: 5,
     paddingLeft: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
+    backgroundColor: "#E9F5FFFF",
     padding: 10,
     marginVertical: 5,
   },
   stopoversTitle: {
     fontWeight: "bold",
-    fontSize: 16,
-    color: "#555",
+    fontSize: 18,
+    color: "#16B5FFFF",
   },
   stopover: {
     marginTop: 3,
