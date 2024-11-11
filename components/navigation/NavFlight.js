@@ -52,7 +52,7 @@ export default function NavFlight() {
         options={{
           animationEnabled: true,
           headerBackImage: () => backArrow,
-          headerTitle: "Passenger data",
+          headerTitle: "",
           headerTransparent: true,
         }}
       ></Stack.Screen>

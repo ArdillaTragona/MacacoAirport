@@ -5,9 +5,32 @@ import {
   StyleSheet,
   Button,
   TextInput,
+  TouchableOpacity,
   ScrollView,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
+const CustomCheckBox = ({ label, checked, onChange }) => (
+  <TouchableOpacity style={styles.checkboxContainer} onPress={onChange}>
+    <MaterialCommunityIcons
+      name={checked ? "checkbox-marked" : "checkbox-blank-outline"}
+      size={24}
+      color={checked ? "#FFFFFFFF" : "#FFFFFFFF"}
+    />
+  </TouchableOpacity>
+);
+
+const CheckItem = () => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  return (
+    <CustomCheckBox
+      checked={isChecked}
+      onChange={() => setIsChecked(!isChecked)}
+    />
+  );
+};
 
 const Passenger = ({ navigation }) => {
   const route = useRoute();
@@ -21,13 +44,23 @@ const Passenger = ({ navigation }) => {
     classOfService,
   } = route.params;
 
-  // Estado para almacenar nombres y apellidos de cada pasajero
+  // Estado para almacenar los datos de cada pasajero
   const [passengers, setPassengers] = useState({
-    adults: Array(adults).fill({ name: "", lastName: "" }),
-    children: Array(children).fill({ name: "", lastName: "" }),
+    adults: Array(adults).fill({
+      name: "",
+      lastName: "",
+      birthDate: "",
+      nationality: "",
+    }),
+    children: Array(children).fill({
+      name: "",
+      lastName: "",
+      birthDate: "",
+      nationality: "",
+    }),
   });
 
-  // Manejar el cambio de texto para un pasajero específico
+  // Maneja el cambio de texto para un pasajero específico
   const handleTextChange = (group, index, field, value) => {
     const updatedGroup = passengers[group].map((passenger, i) =>
       i === index ? { ...passenger, [field]: value } : passenger
@@ -35,11 +68,28 @@ const Passenger = ({ navigation }) => {
     setPassengers({ ...passengers, [group]: updatedGroup });
   };
 
+  // Renderiza el formulario de pasajeros
   const renderForm = (count, label, group) => {
     return Array.from({ length: count }).map((_, index) => (
       <View key={`${label}-${index}`} style={styles.containerForm}>
-        <Text style={styles.formEncabezado}>{`${label} ${index + 1}`}</Text>
         <View style={styles.rowContainer}>
+          <View style={styles.checkboxContainer}>
+            <MaterialCommunityIcons
+              name="account-plus"
+              size={24}
+              color="#FFFFFFFF"
+            />
+            <Text
+              style={{ fontWeight: "bold", fontSize: 15, color: "white" }}
+            >{`${label} ${index + 1}`}</Text>
+          </View>
+          <View style={styles.checkboxContainer}>
+            <Text style={{ color: "white", fontWeight: "bold" }}>Passport</Text>
+            <CheckItem />
+          </View>
+        </View>
+
+        <View style={styles.rowContainerInput}>
           <TextInput
             style={styles.input}
             placeholder="First name"
@@ -57,40 +107,55 @@ const Passenger = ({ navigation }) => {
             }
           />
         </View>
+
+        <View style={styles.rowContainerInput}>
+          <TextInput
+            style={styles.input}
+            placeholder="(DD/MM/YYYY)"
+            value={passengers[group][index].birthDate}
+            onChangeText={(input) =>
+              handleTextChange(group, index, "birthDate", input)
+            }
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nationality"
+            value={passengers[group][index].nationality}
+            onChangeText={(input) =>
+              handleTextChange(group, index, "nationality", input)
+            }
+          />
+        </View>
       </View>
     ));
   };
 
   return (
-    <View style={{ flex: 1, marginTop: 40 }}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        style={styles.container}
-      >
-        <Text>Origen: {origin}</Text>
-        <Text>Destino: {destination}</Text>
-        <Text>Fecha de salida: {departureDate}</Text>
-        <Text>Fecha de regreso: {returnDate}</Text>
-        <Text>Clase: {classOfService}</Text>
+    <View style={{ flex: 1 }}>
+      <View style={{backgroundColor:"#0D253BFF", justifyContent:"center",height:55, paddingLeft:50}}>
+        <Text style={{color:"#22B6FA",fontSize:25,fontWeight:"bold"}}>Passenger data</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View>
-          {renderForm(adults, "Adulto", "adults")}
-          {renderForm(children, "Niño", "children")}
+          {renderForm(adults, "Adult", "adults")}
+          {renderForm(children, "Child", "children")}
         </View>
       </ScrollView>
-      <Button
-        title={"Confirm information"}
-        style={styles.boton}
-        onPress={() =>
-          navigation.navigate("Seats", {
-            origin,
-            destination,
-            departureDate,
-            returnDate,
-            classOfService,
-            passengers,
-          })
-        }
-      />
+      <View style={{ padding: 30 }}>
+        <Button
+          title="Confirm information"
+          onPress={() =>
+            navigation.navigate("Seats", {
+              origin,
+              destination,
+              departureDate,
+              returnDate,
+              classOfService,
+              passengers,
+            })
+          }
+        />
+      </View>
     </View>
   );
 };
@@ -101,33 +166,50 @@ const styles = StyleSheet.create({
     padding: 30,
     marginTop: 20,
   },
+  scrollContainer: {
+    flexGrow: 1,
+    padding: 30,
+    backgroundColor: "#0D253BFF",
+  },
   containerForm: {
     width: "100%",
     borderRadius: 20,
-    borderWidth: 4,
     padding: 15,
-    marginBottom: 10,
+    marginBottom: 15,
+    backgroundColor: "#22B6FA",
   },
   input: {
-    width: 150,
+    width: "48%",
     padding: 5,
+    backgroundColor: "white",
     paddingLeft: 15,
-    borderWidth: 3,
-    borderRadius: 15,
+    borderRadius: 8,
+    marginBottom: 5,
   },
   formEncabezado: {
-    fontSize: 14,
+    fontSize: 18,
     marginBottom: 10,
     fontWeight: "bold",
-    color: "#000000FF",
+    color: "#FFFFFF",
   },
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
-  boton: {
-    position: "absolute",
-    bottom: 0,
+  rowContainerInput: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  checkContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    width: 80,
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
 });
 
