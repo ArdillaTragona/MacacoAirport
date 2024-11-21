@@ -8,9 +8,13 @@ import {
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SeatDescription from "../../components/headers/SeatDescription";
+import { useRoute } from "@react-navigation/native";
 import DestinationHeader from "../../components/headers/DestinationHeader";
 
 const SeatSelector = ({ navigation }) => {
+  const route = useRoute();
+  //const { passengers } = route.params; // Accedemos a los pasajeros
+
   // Crear un estado para los asientos, ahora de 20x4
   const [seats] = useState([
     ["A1", "A2", "A3", "A4", "A5", "A6"],
@@ -61,6 +65,7 @@ const SeatSelector = ({ navigation }) => {
   // Función para renderizar cada asiento
   const renderSeat = (seat) => {
     const isOccupied = occupiedSeats.includes(seat);
+
     const isSelected = seat === selectedSeat;
     const isWindowSeat = ventanilla.includes(seat); // Verificar si es asiento de ventanilla
 
@@ -91,6 +96,7 @@ const SeatSelector = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SeatDescription />
+
       <Text style={styles.text}></Text>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {seats.map((row, rowIndex) => (

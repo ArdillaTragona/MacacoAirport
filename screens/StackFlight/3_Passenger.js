@@ -44,6 +44,19 @@ const Passenger = ({ navigation }) => {
     classOfService,
   } = route.params;
 
+  const [passengerData, setPassengerData] = useState({
+    adultCount: adults,
+    childCount: children,
+    passengers: [
+      {
+        firstName: "",
+        lastName: "",
+        birthDate: "",
+        nationality: "",
+      },
+    ],
+  });
+
   // Estado para almacenar los datos de cada pasajero
   const [passengers, setPassengers] = useState({
     adults: Array(adults).fill({
@@ -94,16 +107,16 @@ const Passenger = ({ navigation }) => {
             style={styles.input}
             placeholder="First name"
             value={passengers[group][index].name}
-            onChangeText={(input) =>
-              handleTextChange(group, index, "name", input)
+            onChangeText={(text) =>
+              handleTextChange(group, index, "name", text)
             }
           />
           <TextInput
             style={styles.input}
             placeholder="Last name"
             value={passengers[group][index].lastName}
-            onChangeText={(input) =>
-              handleTextChange(group, index, "lastName", input)
+            onChangeText={(text) =>
+              handleTextChange(group, index, "lastName", text)
             }
           />
         </View>
@@ -113,16 +126,16 @@ const Passenger = ({ navigation }) => {
             style={styles.input}
             placeholder="(DD/MM/YYYY)"
             value={passengers[group][index].birthDate}
-            onChangeText={(input) =>
-              handleTextChange(group, index, "birthDate", input)
+            onChangeText={(text) =>
+              handleTextChange(group, index, "birthDate", text)
             }
           />
           <TextInput
             style={styles.input}
             placeholder="Nationality"
             value={passengers[group][index].nationality}
-            onChangeText={(input) =>
-              handleTextChange(group, index, "nationality", input)
+            onChangeText={(text) =>
+              handleTextChange(group, index, "nationality", text)
             }
           />
         </View>
@@ -132,8 +145,17 @@ const Passenger = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{backgroundColor:"#0D253BFF", justifyContent:"center",height:55, paddingLeft:50}}>
-        <Text style={{color:"#22B6FA",fontSize:25,fontWeight:"bold"}}>Passenger data</Text>
+      <View
+        style={{
+          backgroundColor: "#0D253BFF",
+          justifyContent: "center",
+          height: 55,
+          paddingLeft: 50,
+        }}
+      >
+        <Text style={{ color: "#22B6FA", fontSize: 25, fontWeight: "bold" }}>
+          Passenger data
+        </Text>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View>
@@ -151,7 +173,10 @@ const Passenger = ({ navigation }) => {
               departureDate,
               returnDate,
               classOfService,
-              passengers,
+              passengers, // Asegúrate de pasar el estado correcto
+              children,
+              adults,
+              //passengerData, // También puedes pasar estos datos si los necesitas
             })
           }
         />
