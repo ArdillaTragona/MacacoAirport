@@ -134,7 +134,7 @@ const FlightSearchScreen = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              width: "%100",
+              width: "100%",
               gap: 10,
             }}
           >
@@ -176,7 +176,7 @@ const FlightSearchScreen = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              width: "%100",
+              width: "100%",
               gap: 10,
             }}
           >
@@ -251,7 +251,7 @@ const FlightSearchScreen = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              width: "%100",
+              width: "100%",
               gap: 10,
             }}
           >
@@ -330,13 +330,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 2,
-    width: 140, // Esto establece el ancho del componente como el 80% del ancho de la pantalla
-    height: 50, // Esto establece la altura del componente como el 10% de la altura de la pantalla
+    width: "90%", // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: 30, // Esto establece la altura del componente como el 10% de la altura de la pantalla
   },
 
   inputDate: {
-    width: 140, // Esto establece el ancho del componente como el 80% del ancho de la pantalla
-    height: 50, // Esto establece la altura del componente como el 10% de la altura de la pantalla
+    width: "90%", // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: 30, // Esto establece la altura del componente como el 10% de la altura de la pantalla
     justifyContent: "center",
     paddingLeft: 17,
     backgroundColor: "#FFFFFF",
