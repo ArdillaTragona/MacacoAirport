@@ -3,6 +3,9 @@
     "name": "macaco2",
     "slug": "macaco2",
     "version": "1.0.0",
+    "extra": {
+      "newArchEnabled": false
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
