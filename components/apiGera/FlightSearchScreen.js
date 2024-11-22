@@ -1,3 +1,7 @@
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import airports from "../data/airports"; //Data de aeropuertos y codigos IATA
@@ -330,13 +334,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 2,
-    width: "90%", // Esto establece el ancho del componente como el 80% del ancho de la pantalla
-    height: 30, // Esto establece la altura del componente como el 10% de la altura de la pantalla
+    width: wp(34), // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: hp(5), // Esto establece la altura del componente como el 10% de la altura de la pantalla
   },
 
   inputDate: {
-    width: "90%", // Esto establece el ancho del componente como el 80% del ancho de la pantalla
-    height: 30, // Esto establece la altura del componente como el 10% de la altura de la pantalla
+    width: wp(34), // Esto establece el ancho del componente como el 80% del ancho de la pantalla
+    height: hp(5), // Esto establece la altura del componente como el 10% de la altura de la pantalla
     justifyContent: "center",
     paddingLeft: 17,
     backgroundColor: "#FFFFFF",
