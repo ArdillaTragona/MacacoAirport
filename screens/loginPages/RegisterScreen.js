@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
-  View,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-  Image,
-  Text,
-  TouchableOpacity,
-  StatusBar,
-} from "react-native";
+import { View, ImageBackground, StyleSheet, TextInput, Image, Text, TouchableOpacity, StatusBar } from "react-native";
+import { registerUser } from "../../database/RegisterDB"; // Importar la función de registro desde RegisterDB.js
 
 export default function RegisterScreen({ setIsAuthenticated, navigation }) {
   const [focusedInput, setIsFocused] = useState(false);
@@ -16,58 +8,41 @@ export default function RegisterScreen({ setIsAuthenticated, navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
-    // Aquí va la lógica de autenticación
-    setIsAuthenticated(true); // Si la autenticación es exitosa
+  const handleRegister = async () => {
+    try {
+      await registerUser(username, email, password);
+      setIsAuthenticated(true); // Si la autenticación es exitosa
+      navigation.navigate("Home"); // Redirigir a la pantalla principal
+    } catch (error) {
+      console.error("Registration failed:", error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content" // Contenido de la barra en color claro
-        backgroundColor="transparent" // Fondo transparente
-        translucent={true} // Permite que el contenido debajo de la barra de estado sea visible
-      />
-      <ImageBackground /* Imagen de fondo */
-        source={require("../../assets/images/WallpaperBlue.png")} // Ruta de la imagen de fondo
-        style={styles.backgroundImage} // Estilo para el ImageBackground
-        resizeMode="cover" /* tomar toda la pantalla */
-      >
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
+      <ImageBackground source={require("../../assets/images/WallpaperBlue.png")} style={styles.backgroundImage} resizeMode="cover">
         <View style={styles.contenido}>
-          <Image
-            style={styles.logo}
-            source={require("../../assets/icons/LogoBird.png")}
-            resizeMode="contain"
-          ></Image>
+          <Image style={styles.logo} source={require("../../assets/icons/LogoBird.png")} resizeMode="contain" />
 
           <Text style={styles.textoEncabezado}>Username</Text>
-
           <TextInput
-            style={[
-              styles.input,
-              focusedInput === "username" && styles.focusedInput,
-            ]}
-            maxLength={20} /* Capacidad maxima de caracteres */
+            style={[styles.input, focusedInput === "username" && styles.focusedInput]}
+            maxLength={20}
             value={username}
             onChangeText={setUsername}
-            selectionColor="#22B6FAFF"
             placeholder="username_example"
             placeholderTextColor="#BBBBBB"
-            onBlur={() => setIsFocused(null)}
             onFocus={() => setIsFocused("username")}
+            onBlur={() => setIsFocused(null)}
           />
 
           <Text style={styles.textoEncabezado}>Email</Text>
-
           <TextInput
-            style={[
-              styles.input,
-              focusedInput === "email" && styles.focusedInput,
-            ]}
-            placeholder="example01@gmail.com"
+            style={[styles.input, focusedInput === "email" && styles.focusedInput]}
             value={email}
             onChangeText={setEmail}
-            selectionColor="#22B6FAFF"
+            placeholder="example01@gmail.com"
             keyboardType="email-address"
             placeholderTextColor="#BBBBBB"
             onFocus={() => setIsFocused("email")}
@@ -75,48 +50,25 @@ export default function RegisterScreen({ setIsAuthenticated, navigation }) {
           />
 
           <Text style={styles.textoEncabezado}>Password</Text>
-
           <TextInput
-            style={[
-              styles.input,
-              focusedInput === "password" && styles.focusedInput,
-            ]}
-            placeholder="password_Example"
-            selectionColor="#22B6FAFF"
-            placeholderTextColor="#BBBBBB"
-            secureTextEntry
+            style={[styles.input, focusedInput === "password" && styles.focusedInput]}
             value={password}
             onChangeText={setPassword}
-            onFocus={() =>
-              setIsFocused("password")
-            } /* Cuando el textinput esta enfocado */
-            onBlur={() =>
-              setIsFocused(null)
-            } /* Cuando el textinput no esta enfocado */
+            secureTextEntry
+            placeholder="password_Example"
+            placeholderTextColor="#BBBBBB"
+            onFocus={() => setIsFocused("password")}
+            onBlur={() => setIsFocused(null)}
           />
 
           <TouchableOpacity style={styles.botonLogReg} onPress={handleRegister}>
-            <Text
-              style={{
-                color: "white",
-                textAlign: "center",
-                fontSize: 15,
-                fontWeight: "bold",
-              }}
-            >
-              Sign up
-            </Text>
+            <Text style={{ color: "white", textAlign: "center", fontSize: 15, fontWeight: "bold" }}>Sign up</Text>
           </TouchableOpacity>
 
           <View style={{ flexDirection: "row" }}>
-            <Text style={{ color: "#ffffff" }}>You hace an account?</Text>
-
+            <Text style={{ color: "#ffffff" }}>You have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text
-                style={{ color: "#ffffff", fontWeight: "bold", marginLeft: 10 }}
-              >
-                Sign in
-              </Text>
+              <Text style={{ color: "#ffffff", fontWeight: "bold", marginLeft: 10 }}>Sign in</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -124,6 +76,7 @@ export default function RegisterScreen({ setIsAuthenticated, navigation }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
