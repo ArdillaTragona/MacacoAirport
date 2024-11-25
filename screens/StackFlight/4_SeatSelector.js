@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useRoute } from "@react-navigation/native";
+import { useEffect } from "react";
+
 import {
   View,
   Text,
@@ -11,6 +14,14 @@ import SeatDescription from "../../components/headers/SeatDescription";
 import DestinationHeader from "../../components/headers/DestinationHeader";
 
 const SeatSelector = ({ navigation }) => {
+  // Usar `useRoute` dentro del componente
+  const route = useRoute();
+  const { passengers } = route.params; // Obtener datos enviados desde la navegación
+
+  useEffect(() => {
+    console.log("Passengers received:", passengers); // Verificar datos recibidos
+  }, [passengers]);
+
   // Crear un estado para los asientos, ahora de 20x4
   const [seats] = useState([
     ["A1", "A2", "A3", "A4", "A5", "A6"],

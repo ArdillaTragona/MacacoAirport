@@ -60,6 +60,31 @@ const Passenger = ({ navigation }) => {
     }),
   });
 
+  const isDataValid = () => {
+    const allFieldsFilled = (group) =>
+      passengers[group].every((passenger) =>
+        Object.values(passenger).every((value) => value.trim() !== "")
+      );
+
+    return allFieldsFilled("adults") && allFieldsFilled("children");
+  };
+
+  const handleConfirm = () => {
+    if (!isDataValid()) {
+      alert("Please fill out all the fields correctly.");
+      return;
+    }
+
+    navigation.navigate("Seats", {
+      origin,
+      destination,
+      departureDate,
+      returnDate,
+      classOfService,
+      passengers,
+    });
+  };
+
   // Maneja el cambio de texto para un pasajero específico
   const handleTextChange = (group, index, field, value) => {
     const updatedGroup = passengers[group].map((passenger, i) =>
@@ -132,8 +157,17 @@ const Passenger = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{backgroundColor:"#0D253BFF", justifyContent:"center",height:55, paddingLeft:50}}>
-        <Text style={{color:"#22B6FA",fontSize:25,fontWeight:"bold"}}>Passenger data</Text>
+      <View
+        style={{
+          backgroundColor: "#0D253BFF",
+          justifyContent: "center",
+          height: 55,
+          paddingLeft: 50,
+        }}
+      >
+        <Text style={{ color: "#22B6FA", fontSize: 25, fontWeight: "bold" }}>
+          Passenger data
+        </Text>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View>
@@ -142,19 +176,7 @@ const Passenger = ({ navigation }) => {
         </View>
       </ScrollView>
       <View style={{ padding: 30 }}>
-        <Button
-          title="Confirm information"
-          onPress={() =>
-            navigation.navigate("Seats", {
-              origin,
-              destination,
-              departureDate,
-              returnDate,
-              classOfService,
-              passengers,
-            })
-          }
-        />
+        <Button title="Confirm information" onPress={handleConfirm} />
       </View>
     </View>
   );
