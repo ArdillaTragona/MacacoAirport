@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+
 import { useRoute } from "@react-navigation/native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
@@ -44,6 +45,7 @@ const Passenger = ({ navigation }) => {
     classOfService,
   } = route.params;
 
+
   // Estado para almacenar los datos de cada pasajero
   const [passengers, setPassengers] = useState({
     adults: Array(adults).fill({
@@ -76,12 +78,14 @@ const Passenger = ({ navigation }) => {
     }
 
     navigation.navigate("Seats", {
+      adults,
       origin,
+      children,
+      passengers,
+      returnDate,
       destination,
       departureDate,
-      returnDate,
       classOfService,
-      passengers,
     });
   };
 

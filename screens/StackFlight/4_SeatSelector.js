@@ -11,18 +11,26 @@ import {
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SeatDescription from "../../components/headers/SeatDescription";
-import DestinationHeader from "../../components/headers/DestinationHeader";
 
 const SeatSelector = ({ navigation }) => {
-  // Usar `useRoute` dentro del componente
   const route = useRoute();
-  const { passengers } = route.params; // Obtener datos enviados desde la navegación
+  const {
+    origin,
+    adults,
+    children,
+    passengers,
+    returnDate,
+    destination,
+    departureDate,
+    classOfService,
+  } = route.params;
 
-  useEffect(() => {
-    console.log("Passengers received:", passengers); // Verificar datos recibidos
-  }, [passengers]);
+  // Determinar el total de asientos permitidos
+  const totalSeatsAllowed = adults + children;
 
-  // Crear un estado para los asientos, ahora de 20x4
+  // Estado para los asientos seleccionados
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
   const [seats] = useState([
     ["A1", "A2", "A3", "A4", "A5", "A6"],
     ["B1", "B2", "B3", "B4", "B5", "B6"],
@@ -46,10 +54,8 @@ const SeatSelector = ({ navigation }) => {
     ["T1", "T2", "T3", "T4", "T5", "T6"],
   ]);
 
-  // Estado para los asientos seleccionados y ocupados
-  const [selectedSeat, setSelectedSeat] = useState(null);
-  const [occupiedSeats] = useState(["A2", "C3", "D4", "L2", "P4"]); // Algunos asientos ocupados
-  const [ventanilla] = useState([
+  const [occupiedSeats] = useState(["A2", "C3", "D4", "L2", "P4"]); //Asientos ocupados
+  const [ventanilla] = useState([                                   //Asientos en ventanilla
     "D1",
     "D6",
     "H1",
@@ -60,40 +66,68 @@ const SeatSelector = ({ navigation }) => {
     "P6",
     "S1",
     "S6",
-  ]); //Asientos de ventanilla
+  ]);
 
-  // Función para seleccionar asiento
+  // Función para manejar la selección de asiento
   const handleSelectSeat = (seat) => {
-    if (!occupiedSeats.includes(seat)) {
-      setSelectedSeat(seat === selectedSeat ? null : seat);
+    if (occupiedSeats.includes(seat)) return; // No seleccionar si está ocupado
+
+    if (selectedSeats.includes(seat)) {
+      // Si ya está seleccionado, quítalo
+      setSelectedSeats(selectedSeats.filter((s) => s !== seat));
+    } else {
+      // Si no está seleccionado y no se excede el límite, agréguelo
+      if (selectedSeats.length < totalSeatsAllowed) {
+        setSelectedSeats([...selectedSeats, seat]);
+      } else {
+        alert(`You can only select up to ${totalSeatsAllowed} seats.`);
+      }
     }
   };
 
-  // Función para renderizar cada asiento
+  const handleConfirm = () => {
+    if (selectedSeats.length !== totalSeatsAllowed) {
+      alert(`Please select ${totalSeatsAllowed} seats.`);
+      return;
+    }
+
+    navigation.navigate("Payment", {
+      adults,
+      origin,
+      children,
+      passengers,
+      returnDate,
+      destination,
+      departureDate,
+      classOfService,
+      selectedSeats,
+    });
+  };
+
   const renderSeat = (seat) => {
     const isOccupied = occupiedSeats.includes(seat);
-    const isSelected = seat === selectedSeat;
-    const isWindowSeat = ventanilla.includes(seat); // Verificar si es asiento de ventanilla
+    const isSelected = selectedSeats.includes(seat);
+    const isWindowSeat = ventanilla.includes(seat);
 
     return (
       <TouchableOpacity
         key={seat}
         onPress={() => handleSelectSeat(seat)}
-        disabled={isOccupied} // No se puede seleccionar si está ocupado
-        style={styles.seatContainer} // Mantener el contenedor para el espaciado
+        disabled={isOccupied}
+        style={styles.seatContainer}
       >
         <MaterialCommunityIcons
           name="seat"
-          size={30} // Ajusta el tamaño según tu diseño
+          size={30}
           color={
             isOccupied
-              ? "#202A66FF" // Ocupado
+              ? "#202A66FF"
               : isSelected
-              ? "#2EABFFFF" // Seleccionado
+              ? "#2EABFFFF"
               : isWindowSeat
-              ? "#5A9AC5FF" // Ventanilla, color dorado o el que prefieras
-              : "#9FD9FFFF" // Disponible
-          } // Cambia el color si está ocupado o seleccionado
+              ? "#5A9AC5FF"
+              : "#9FD9FFFF"
+          }
         />
       </TouchableOpacity>
     );
@@ -102,33 +136,20 @@ const SeatSelector = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SeatDescription />
-      <Text style={styles.text}></Text>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {seats.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
-            {row.map((seat, seatIndex) => (
-              <View
-                key={seatIndex}
-                style={
-                  seatIndex === 1 || seatIndex === 3 ? styles.columnSpace : {}
-                }
-              >
-                {renderSeat(seat)}
-              </View>
+            {row.map((seat) => (
+              <View key={seat}>{renderSeat(seat)}</View>
             ))}
           </View>
         ))}
       </ScrollView>
       <View style={styles.containerResult}>
-        {selectedSeat && (
-          <Text style={styles.selectedText}>Selected Seat: {selectedSeat}</Text>
-        )}
-        <TouchableOpacity
-          style={styles.botonConfirm}
-          onPress={() => {
-            navigation.navigate("Payment");
-          }}
-        >
+        <Text style={styles.selectedText}>
+          Selected Seats: {selectedSeats.join(", ")}
+        </Text>
+        <TouchableOpacity style={styles.botonConfirm} onPress={handleConfirm}>
           <Text style={{ color: "white", fontWeight: "bold" }}>
             Confirm seats
           </Text>
