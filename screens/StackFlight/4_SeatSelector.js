@@ -23,6 +23,10 @@ const SeatSelector = ({ navigation }) => {
     destination,
     departureDate,
     classOfService,
+    duration,
+    flightNumber,
+    bording,
+    bordingReturn,
   } = route.params;
 
   // Determinar el total de asientos permitidos
@@ -55,7 +59,8 @@ const SeatSelector = ({ navigation }) => {
   ]);
 
   const [occupiedSeats] = useState(["A2", "C3", "D4", "L2", "P4"]); //Asientos ocupados
-  const [ventanilla] = useState([                                   //Asientos en ventanilla
+  const [ventanilla] = useState([
+    //Asientos en ventanilla
     "D1",
     "D6",
     "H1",
@@ -101,6 +106,11 @@ const SeatSelector = ({ navigation }) => {
       departureDate,
       classOfService,
       selectedSeats,
+      duration,
+      flightNumber,
+      bording,
+      selectedSeats,
+      bordingReturn,
     });
   };
 

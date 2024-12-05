@@ -43,8 +43,11 @@ const Passenger = ({ navigation }) => {
     adults,
     children,
     classOfService,
+    duration,
+    flightNumber,
+    bording,
+    bordingReturn,
   } = route.params;
-
 
   // Estado para almacenar los datos de cada pasajero
   const [passengers, setPassengers] = useState({
@@ -86,6 +89,10 @@ const Passenger = ({ navigation }) => {
       destination,
       departureDate,
       classOfService,
+      duration,
+      flightNumber,
+      bording,
+      bordingReturn,
     });
   };
 

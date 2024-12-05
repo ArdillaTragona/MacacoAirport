@@ -15,7 +15,6 @@ const PassengerList = ({ group, label, datosVuelo }) => {
       <Text style={styles.groupTitle}>{label}</Text>
       <FlatList
         data={group}
-        nestedScrollEnabled={true}
         keyExtractor={(_, index) => `${label}-${index}`}
         renderItem={({ item, index }) => (
           <View style={styles.passengerItem}>
@@ -33,6 +32,10 @@ const PassengerList = ({ group, label, datosVuelo }) => {
                   marginTop: 3,
                 }}
               >
+                <View>
+                  <Text style={styles.txtEncabezados}>Nacionality</Text>
+                  <Text style={styles.txtDatos}>{item.nationality}</Text>
+                </View>
                 <View>
                   <Text style={styles.txtEncabezados}>Flight</Text>
                   <Text style={styles.txtDatos}>{datosVuelo.flightNumber}</Text>
@@ -59,7 +62,11 @@ const PassengerList = ({ group, label, datosVuelo }) => {
                   {datosVuelo.returnDate && (
                     <View>
                       <Text style={styles.txtEncabezados}>Return date:</Text>
-                      <Text>{datosVuelo.bordingReturn}</Text>
+                      <Text>
+                        {datosVuelo.returnDate}
+                        {"  "}
+                        {datosVuelo.bordingReturn}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -80,66 +87,48 @@ const PassengerList = ({ group, label, datosVuelo }) => {
 };
 
 const Payment = () => {
-  const route = useRoute();
-  const {
-    adults,
-    origin,
-    children,
-    passengers,
-    returnDate,
-    selectedSeats, // Recibe los asientos seleccionados
-    destination,
-    departureDate,
-    classOfService,
-    duration,
-    flightNumber,
-    bording,
-    bordingReturn,
-  } = route.params;
-
+  // Datos de ejemplo
   const datosVuelo = {
-    origin,
-    duration,
-    returnDate,
-    destination,
-    flightNumber,
-    departureDate,
-    classOfService,
-    bording,
-    bordingReturn,
+    origin: "MEX",
+    destination: "JFK",
+    flightNumber: "AA123",
+    duration: "5h 30m",
+    bording: "10:30 AM",
+    returnDate: "20/12/24",
+    bordingReturn: "4:00 PM",
   };
 
+  const group = [
+    {
+      name: "Cesar Gabriel",
+      lastName: "Teista Garcia",
+      nationality: "Mexican",
+    },
+    { name: "Jane", lastName: "Smith", nationality: "Canadian" },
+  ];
+
+  const label = "Passengers";
   return (
-    <FlatList
-      data={[
-        { group: passengers.adults, label: "Adults" },
-        { group: passengers.children, label: "Children" },
-      ]}
-      keyExtractor={(item) => item.label}
-      renderItem={({ item }) => (
-        <PassengerList
-          group={item.group}
-          label={item.label}
-          datosVuelo={datosVuelo}
-        />
-      )}
-      style={styles.contLista}
-      ListHeaderComponent={
-        <View>
-          <Text style={styles.header}>Tickets Generated</Text>
-        </View>
-      }
-    />
+    <View style={styles.contPrinc}>
+      <Text style={styles.header}>Tickets Generated</Text>
+      <View style={styles.contLista}>
+        <PassengerList datosVuelo={datosVuelo} group={group} label={label} />
+      </View>
+    </View>
   );
 };
 
 export default Payment;
 
 const styles = StyleSheet.create({
+  contPrinc: {
+    flex: 1,
+    backgroundColor: "#FFFFFFFF",
+  },
   contLista: {
     flex: 1,
     padding: 20,
-    paddingTop: 3,
+    paddingTop: 20,
     backgroundColor: "#2EABFFFF",
   },
   header: {
@@ -147,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#FFFFFFFF",
+    color: "#2EABFFFF",
   },
   groupContainer: {
     marginBottom: 16,

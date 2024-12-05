@@ -74,7 +74,9 @@ export default function NavFlight() {
         options={{
           gestureEnabled: true,
           animationEnabled: true,
-          headerBackImage: () => backArrow,
+          headerBackImage: () => (
+            <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
+          ),
           headerTitle: "",
           headerTransparent: true,
         }}

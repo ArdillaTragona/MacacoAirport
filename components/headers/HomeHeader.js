@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -13,8 +13,14 @@ const HomeHeader = () => {
   const iconColor = (index) =>
     currentRouteIndex === index ? "white" : "#BED8E9FF";
 
-  const icons = ["airplane-marker", "airplane-search","account-multiple-plus","seat","credit-card"];
-  const labels = ["Route", "Flight","Passenger","Seat", "Payment"];
+  const icons = [
+    "airplane-marker",
+    "airplane-search",
+    "account-multiple-plus",
+    "seat",
+    "credit-card",
+  ];
+  const labels = ["Route", "Flight", "Passenger", "Seat", "Payment"];
 
   return (
     <View style={styles.container}>
@@ -23,6 +29,23 @@ const HomeHeader = () => {
         backgroundColor="transparent" // Fondo transparente
         translucent={true} // Permite que el contenido debajo de la barra de estado sea visible
       />
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          height: 50,
+          marginTop: 25,
+          marginBottom: 4,
+        }}
+      >
+        <Image
+          source={require("../../assets/icons/LogoBird.png")}
+          resizeMode="contain"
+          style={styles.logoImage}
+        />
+        <Text style={styles.Isotipo}>BirdFlight</Text>
+      </View>
+
       <View style={styles.row}>
         {icons.map((icon, index) => (
           <View key={icon} style={styles.iconContainer}>
@@ -48,11 +71,10 @@ export default HomeHeader;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#2EABFFFF",
-    paddingHorizontal:40,
-    paddingVertical:10
+    paddingHorizontal: 40,
+    paddingBottom: 20,
   },
   row: {
-    marginTop:35,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -62,4 +84,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10,
   },
+  logoImage: { width: 30, height: 30 },
+  Isotipo: { color: "white", fontSize: 25, fontWeight: "800" },
 });

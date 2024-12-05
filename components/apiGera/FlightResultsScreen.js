@@ -198,6 +198,14 @@ const FlightResultsScreen = ({ route, navigation }) => {
             adults,
             children,
             classOfService,
+            duration: formatDuration(outbound?.itineraries[0]?.duration),
+            flightNumber:
+              outboundSegments[0]?.carrierCode + outboundSegments[0]?.number ||
+              "N/A",
+            bording: formatDateTime(outboundSegments[0]?.departure?.at),
+            bordingReturn: formatDateTime(
+              returnSegments[returnSegments.length - 1]?.arrival?.at
+            ),
           })
         }
       >
