@@ -11,27 +11,55 @@ import {
   StatusBar
 } from "react-native";
 
+// Importar la configuración de Firebase y funciones necesarias
+import { auth, db } from "../../credenciales"; // Asegúrate de la ruta correcta
+import { signInWithEmailAndPassword } from "firebase/auth"; // Importar la función de login de Firebase
+import { doc, getDoc } from "firebase/firestore"; // Si deseas trabajar con Firestore también
+
 const LoginScreen = ({ navigation, setIsAuthenticated }) => {
   const [focusedInput, setIsFocused] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // Para manejar los errores
 
-  const handleLogin = () => {
-    // Aquí va la lógica de autenticación
-    setIsAuthenticated(true); // Si la autenticación es exitosa
+  const handleLogin = async () => {
+    try {
+      // Intentamos autenticar al usuario con Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      // Si el login es exitoso, puedes hacer algo adicional
+      console.log("Usuario autenticado:", userCredential.user);
+
+      // Si deseas validar más información, como obtener datos adicionales de Firestore:
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        console.log("Datos del usuario:", userDocSnap.data());
+      } else {
+        console.log("El documento del usuario no existe");
+      }
+
+      // Establecer la autenticación a true si el login es exitoso
+      setIsAuthenticated(true); 
+
+    } catch (error) {
+      console.error("Error de autenticación:", error);
+      setError("Correo o contraseña incorrectos"); // Mostrar un mensaje de error
+    }
   };
 
   return (
     <View style={styles.container}>
       <StatusBar
-        barStyle="light-content" // Contenido de la barra en color claro
-        backgroundColor="transparent" // Fondo transparente
-        translucent={true} // Permite que el contenido debajo de la barra de estado sea visible
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent={true}
       />
-      <ImageBackground /* Imagen de fondo */
-        source={require("../../assets/images/WallpaperBlue.png")} // Ruta de la imagen de fondo
-        style={styles.backgroundImage} // Estilo para el ImageBackground
-        resizeMode="cover" /* tomar toda la pantalla */
+      <ImageBackground
+        source={require("../../assets/images/WallpaperBlue.png")}
+        style={styles.backgroundImage}
+        resizeMode="cover"
       >
         <View style={styles.contenido}>
           <Image
@@ -42,47 +70,34 @@ const LoginScreen = ({ navigation, setIsAuthenticated }) => {
 
           <Text style={styles.textoEncabezado}>Username / Email</Text>
           <TextInput
-            style={[
-              styles.input,
-              focusedInput === "email" && styles.focusedInput,
-            ]}
+            style={[styles.input, focusedInput === "email" && styles.focusedInput]}
             maxLength={35}
             selectionColor="#158AD8FF"
             placeholder="example01@email.com"
             placeholderTextColor="#BBBBBB"
-            value={email} // Asignar el valor del email
-            onChangeText={setEmail} // Actualizar el estado del email
+            value={email}
+            onChangeText={setEmail}
             onFocus={() => setIsFocused("email")}
             onBlur={() => setIsFocused(null)}
           />
 
-          <Text style={styles.textoEncabezado}>
-            Usuario / Correo electronico
-          </Text>
-          <TextInput //Entrada de la contraseña del usuario
-            style={[
-              styles.input,
-              focusedInput === "password" && styles.focusedInput,
-            ]}
+          <Text style={styles.textoEncabezado}>Password</Text>
+          <TextInput
+            style={[styles.input, focusedInput === "password" && styles.focusedInput]}
             secureTextEntry
             placeholder="password_example"
             placeholderTextColor="#BBBBBB"
             value={password}
             onChangeText={setPassword}
-            selectionColor="#158AD8FF" //Color del cursor textInput
+            selectionColor="#158AD8FF"
             onFocus={() => setIsFocused("password")}
             onBlur={() => setIsFocused(null)}
           />
 
+          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+
           <TouchableOpacity style={styles.botonLogReg} onPress={handleLogin}>
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                textAlign: "center",
-                fontSize:15
-              }}
-            >
+            <Text style={{ color: "white", fontWeight: "bold", textAlign: "center", fontSize: 15 }}>
               Sign in
             </Text>
           </TouchableOpacity>
@@ -90,13 +105,7 @@ const LoginScreen = ({ navigation, setIsAuthenticated }) => {
           <View style={{ flexDirection: "row" }}>
             <Text style={{ color: "#ffffff" }}>Create an account</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-              <Text
-                style={{
-                  color: "#FFFFFF",
-                  fontWeight: "bold",
-                  marginLeft: 10,
-                }}
-              >
+              <Text style={{ color: "#FFFFFF", fontWeight: "bold", marginLeft: 10 }}>
                 Sign up
               </Text>
             </TouchableOpacity>
