@@ -32,10 +32,9 @@ const HomeHeader = () => {
       <View
         style={{
           flexDirection: "row",
-          alignItems: "center",
-          height: 50,
-          marginTop: 25,
-          marginBottom: 4,
+          alignContent: "center",
+          height: 40,
+          marginTop: 40,
         }}
       >
         <Image
@@ -43,7 +42,7 @@ const HomeHeader = () => {
           resizeMode="contain"
           style={styles.logoImage}
         />
-        <Text style={styles.Isotipo}>BirdFlight</Text>
+        <Text style={styles.Isotipo}>Vuelala</Text>
       </View>
 
       <View style={styles.row}>
@@ -84,6 +83,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10,
   },
-  logoImage: { width: 30, height: 30 },
-  Isotipo: { color: "white", fontSize: 25, fontWeight: "800" },
+  logoImage: { width: 25, height: 30 },
+  Isotipo: { color: "white", fontSize: 22, fontWeight: "800" },
 });

@@ -71,6 +71,7 @@ const PassengerList = ({ group, label, datosVuelo }) => {
                 resizeMode="contain"
                 style={styles.qr_demostrativo}
               />
+              <Text>Seat: {item.selectedSeats}</Text>
             </View>
           </View>
         )}
