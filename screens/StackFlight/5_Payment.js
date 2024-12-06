@@ -1,13 +1,15 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   FlatList,
+  Button,
+  Alert,
   Image,
-  ScrollView,
 } from "react-native";
-import React from "react";
 import { useRoute } from "@react-navigation/native";
+import { saveFlightDataToFirestore } from "../../database/FlightDB"; // Importar función para guardar datos
 
 const PassengerList = ({ group, label, datosVuelo }) => {
   return (
@@ -17,7 +19,7 @@ const PassengerList = ({ group, label, datosVuelo }) => {
         data={group}
         nestedScrollEnabled={true}
         keyExtractor={(_, index) => `${label}-${index}`}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <View style={styles.passengerItem}>
             <View style={{ width: 212 }}>
               <View>
@@ -83,12 +85,12 @@ const Payment = () => {
   const route = useRoute();
   const {
     adults,
-    origin,
     children,
     passengers,
-    returnDate,
+    origin,
     destination,
     departureDate,
+    returnDate,
     classOfService,
     duration,
     flightNumber,
@@ -98,48 +100,70 @@ const Payment = () => {
 
   const datosVuelo = {
     origin,
-    duration,
-    returnDate,
     destination,
-    flightNumber,
     departureDate,
+    returnDate,
     classOfService,
+    duration,
+    flightNumber,
     bording,
     bordingReturn,
   };
 
+  const allPassengers = [
+    ...passengers.adults.map((p) => ({ ...p, category: "Adult" })),
+    ...passengers.children.map((p) => ({ ...p, category: "Child" })),
+  ];
+
+  const handleSaveToFirebase = async () => {
+    const success = await saveFlightDataToFirestore(datosVuelo, allPassengers);
+    if (success) {
+      Alert.alert("Éxito", "Datos guardados correctamente en Firebase.");
+    } else {
+      Alert.alert("Error", "Hubo un problema al guardar los datos.");
+    }
+  };
+
   return (
-    <FlatList
-      data={[
-        { group: passengers.adults, label: "Adults" },
-        { group: passengers.children, label: "Children" },
-      ]}
-      keyExtractor={(item) => item.label}
-      renderItem={({ item }) => (
-        <PassengerList
-          group={item.group}
-          label={item.label}
-          datosVuelo={datosVuelo}
-        />
-      )}
-      style={styles.contLista}
-      ListHeaderComponent={
-        <View>
-          <Text style={styles.header}>Tickets Generated</Text>
-        </View>
-      }
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={[
+          { group: passengers.adults, label: "Adults" },
+          { group: passengers.children, label: "Children" },
+        ]}
+        keyExtractor={(item) => item.label}
+        renderItem={({ item }) => (
+          <PassengerList
+            group={item.group}
+            label={item.label}
+            datosVuelo={datosVuelo}
+          />
+        )}
+        style={styles.contLista}
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.header}>Tickets Generated</Text>
+          </View>
+        }
+      />
+      <View style={styles.buttonContainer}>
+        <Button title="BOTON CHILL DE COJONES" onPress={handleSaveToFirebase} />
+      </View>
+    </View>
   );
 };
 
 export default Payment;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#2EABFFFF",
+  },
   contLista: {
     flex: 1,
     padding: 20,
     paddingTop: 3,
-    backgroundColor: "#2EABFFFF",
   },
   header: {
     margin: 10,
@@ -174,6 +198,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontStyle: "italic",
     fontSize: 12,
+  },
+  buttonContainer: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2EABFFFF",
   },
   qr_demostrativo: {
     width: 150,
