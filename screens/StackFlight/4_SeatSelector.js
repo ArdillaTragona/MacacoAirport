@@ -105,11 +105,9 @@ const SeatSelector = ({ navigation }) => {
       destination,
       departureDate,
       classOfService,
-      selectedSeats,
       duration,
       flightNumber,
       bording,
-      selectedSeats,
       bordingReturn,
     });
   };

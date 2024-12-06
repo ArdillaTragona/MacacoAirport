@@ -65,13 +65,12 @@ const PassengerList = ({ group, label, datosVuelo }) => {
                 </View>
               </View>
             </View>
-            <View>
+            <View style={{ justifyContent: "center", alignContent: "center" }}>
               <Image
                 source={require("../../assets/images/QR demostrativo.png")}
                 resizeMode="contain"
                 style={styles.qr_demostrativo}
               />
-              <Text>Seat: {item.selectedSeats}</Text>
             </View>
           </View>
         )}
@@ -88,7 +87,6 @@ const Payment = () => {
     children,
     passengers,
     returnDate,
-    selectedSeats, // Recibe los asientos seleccionados
     destination,
     departureDate,
     classOfService,
