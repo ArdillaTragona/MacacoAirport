@@ -64,8 +64,6 @@ const SettingScreen = () => {
           />
           <View>
             <Text style={styles.txtEncabezado}>{userData.username}</Text>
-            {/* Verifica si userData.name tiene un valor válido */}
-            <Text style={styles.txtDatosUser}>{userData.name}</Text>
             <Text style={styles.txtDatosUser}>{userData.email}</Text>
           </View>
         </View>
@@ -176,7 +174,7 @@ const styles = StyleSheet.create({
   },
   txtEncabezado: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     fontStyle: "italic",
   },
