@@ -6,6 +6,7 @@ import {
   FlatList,
   Button,
   Alert,
+  Image,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { saveFlightDataToFirestore } from "../../database/FlightDB"; // Importar función para guardar datos
@@ -65,6 +66,13 @@ const PassengerList = ({ group, label, datosVuelo }) => {
                   )}
                 </View>
               </View>
+            </View>
+            <View style={{ justifyContent: "center", alignContent: "center" }}>
+              <Image
+                source={require("../../assets/images/QR demostrativo.png")}
+                resizeMode="contain"
+                style={styles.qr_demostrativo}
+              />
             </View>
           </View>
         )}
@@ -196,5 +204,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#2EABFFFF",
+  },
+  qr_demostrativo: {
+    width: 150,
+    height: 112,
   },
 });
