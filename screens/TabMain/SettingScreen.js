@@ -1,18 +1,13 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { auth, db } from "../../credenciales"; // Importa las credenciales y Firebase
+import { getDoc, doc } from "firebase/firestore"; // Para leer los datos de Firestore
 
 const SettingScreen = () => {
+  const [userData, setUserData] = useState({ name: "", email: "" });
+
   const configPerfil = [
     { id: "1", icon: "account", text: "Perfil" },
     { id: "2", icon: "account-edit", text: "Edit perfil" },
@@ -31,6 +26,33 @@ const SettingScreen = () => {
     { id: "3", icon: "application-edit", text: "Customize application" },
   ];
 
+  useEffect(() => {
+    // Obtener el usuario autenticado
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      // Consultar los datos adicionales del usuario en Firestore
+      const userRef = doc(db, "users", currentUser.uid);
+      getDoc(userRef).then((documentSnapshot) => {
+        if (documentSnapshot.exists()) {
+          const userData = documentSnapshot.data();
+          console.log("User Data from Firestore:", userData); // Agregar un log para ver los datos
+  
+          setUserData({
+            username: userData.username || "No Username", // Usar username
+            email: currentUser.email || "No Email", // Usar el correo del usuario
+          });
+        } else {
+          console.log("No such document!");
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
+  }, []);
+
+  // Verifica que los datos de usuario estén correctamente cargados
+  console.log("User Data state:", userData);
+
   return (
     <View>
       <View style={styles.contUserData}>
@@ -41,8 +63,10 @@ const SettingScreen = () => {
             color="white"
           />
           <View>
-            <Text style={styles.txtEncabezado}>Username</Text>
-            <Text style={styles.txtDatosUser}>CESAR GABRIEL TEISTA GARCIA</Text>
+            <Text style={styles.txtEncabezado}>{userData.username}</Text>
+            {/* Verifica si userData.name tiene un valor válido */}
+            <Text style={styles.txtDatosUser}>{userData.name}</Text>
+            <Text style={styles.txtDatosUser}>{userData.email}</Text>
           </View>
         </View>
 
@@ -109,6 +133,7 @@ const ConfigItem = ({ icon, text }) => {
     <TouchableOpacity>
       <View style={styles.rowOpcion}>
         <MaterialCommunityIcons name={icon} size={30} color="#546F80FF" />
+        {/* Asegúrate de que el texto esté dentro del componente <Text> */}
         <Text style={styles.txtOpcion}>{text}</Text>
       </View>
     </TouchableOpacity>
