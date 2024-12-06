@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import {
   Text,
@@ -6,95 +7,35 @@ import {
   StyleSheet,
   SectionList,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
-import React from "react";
+import { getTicketsForUser } from "../../database/TicketDB"; // Servicio de Firebase modificado
+import { getAuth } from "firebase/auth";
 
 const TicketScreen = () => {
-  // Datos simulados
-  const ticketData = [
-    {
-      date: "2024-12-06",
-      tickets: [
-        {
-          id: "1",
-          origin: "TIJ",
-          destination: "MEX",
-          firstName: "CESAR",
-          lastName: "TEISTA",
-        },
-        {
-          id: "2",
-          origin: "MER",
-          destination: "MER",
-          firstName: "GERARDO",
-          lastName: "MALACARA",
-        },
-      ],
-    },
-    {
-      date: "2024-12-09",
-      tickets: [
-        {
-          id: "3",
-          origin: "MEX",
-          destination: "JAL",
-          firstName: "RONNY",
-          lastName: "COLEMAN",
-        },
-        {
-          id: "4",
-          origin: "TIJ",
-          destination: "CAN",
-          firstName: "SERGIO",
-          lastName: "AGUIREE",
-        },
-      ],
-    },
-    {
-      date: "2024-10-22",
-      tickets: [
-        {
-          id: "3",
-          origin: "MEX",
-          destination: "JAL",
-          firstName: "PEDRO",
-          lastName: "PICAFOCO",
-        },
-        {
-          id: "4",
-          origin: "RFC",
-          destination: "SAT",
-          firstName: "ARMANDO",
-          lastName: "SALERO",
-        },
-      ],
-    },
-    {
-      date: "2024-07-15",
-      tickets: [
-        {
-          id: "3",
-          origin: "CUL",
-          destination: "JAL",
-          firstName: "DERECK",
-          lastName: "FREEMAN",
-        },
-        {
-          id: "4",
-          origin: "CID",
-          destination: "PAN",
-          firstName: "ORLANDO",
-          lastName: "PEREZ",
-        },
-      ],
-    },
-  ];
+  const [ticketData, setTicketData] = useState([]);
+
+  const fetchTickets = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const tickets = await getTicketsForUser(user.uid); // Usamos el UID del usuario
+      setTicketData(tickets);
+    } else {
+      console.error("Usuario no autenticado");
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
 
   return (
     <View style={styles.contFather}>
-      <HeaderHome />
+      <HeaderHome onRefresh={fetchTickets} />
       <View style={styles.contListTicket}>
-        <Text style={styles.txtEncHistorial}>Tickets historial</Text>
+        <Text style={styles.txtEncHistorial}>Historial de Tickets</Text>
         <SectionList
           sections={ticketData.map((group) => ({
             fecha: group.date,
@@ -118,40 +59,44 @@ const TicketScreen = () => {
   );
 };
 
-const TicketComponent = ({ origin, destination, firstName, lastName }) => {
-  return (
-    <TouchableOpacity>
-      <View style={styles.ticketGroup}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <MaterialCommunityIcons
-            name="airplane-takeoff"
-            size={24}
-            color="#829AAAFF"
-          />
-          <Text style={styles.ticketText}>
-            {origin} - {destination}
-          </Text>
-        </View>
-        <Text style={{ fontSize: 14 }}>
-          {firstName} {lastName}
+const TicketComponent = ({ origin, destination, firstName, lastName }) => (
+  <TouchableOpacity>
+    <View style={styles.ticketGroup}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <MaterialCommunityIcons
+          name="airplane-takeoff"
+          size={24}
+          color="#829AAAFF"
+        />
+        <Text style={styles.ticketText}>
+          {origin} - {destination}
         </Text>
       </View>
-    </TouchableOpacity>
-  );
-};
-
-const HeaderHome = () => {
-  return (
-    <View style={styles.headerVuelala}>
-      <Image
-        source={require("../../assets/icons/LogoBird.png")}
-        resizeMode="contain"
-        style={styles.logoImage}
-      />
-      <Text style={styles.Isotipo}>Vuelala</Text>
+      <Text style={{ fontSize: 14 }}>
+        {firstName} {lastName}
+      </Text>
     </View>
-  );
-};
+  </TouchableOpacity>
+);
+
+const HeaderHome = ({ onRefresh }) => (
+  <View style={styles.headerVuelala}>
+    <Image
+      source={require("../../assets/icons/LogoBird.png")}
+      resizeMode="contain"
+      style={styles.logoImage}
+    />
+    <Text style={styles.Isotipo}>Vuelala</Text>
+    <TouchableWithoutFeedback onPress={onRefresh}>
+      <MaterialCommunityIcons
+        name="refresh"
+        size={24}
+        color="white"
+        style={styles.refreshIcon}
+      />
+    </TouchableWithoutFeedback>
+  </View>
+);
 
 export default TicketScreen;
 
@@ -198,6 +143,8 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     height: 80,
     gap: 2,
+    justifyContent: "space-between",
+    paddingRight: 20,
   },
   sectionHeader: {
     color: "#BBBBBBFF",
@@ -208,4 +155,7 @@ const styles = StyleSheet.create({
   },
   logoImage: { width: 25, height: 25 },
   Isotipo: { color: "white", fontSize: 22, fontWeight: "800" },
+  refreshIcon: {
+    marginLeft: "auto",
+  },
 });

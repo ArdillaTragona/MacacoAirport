@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { saveFlightDataToFirestore } from "../../database/FlightDB"; // Importar función para guardar datos
+import { getAuth } from "firebase/auth";
 
 const PassengerList = ({ group, label, datosVuelo }) => {
   return (
@@ -116,11 +117,22 @@ const Payment = () => {
   ];
 
   const handleSaveToFirebase = async () => {
-    const success = await saveFlightDataToFirestore(datosVuelo, allPassengers);
-    if (success) {
-      Alert.alert("Éxito", "Datos guardados correctamente en Firebase.");
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const success = await saveFlightDataToFirestore(
+        { ...datosVuelo, IDUser: user.uid },
+        allPassengers,
+        user.uid
+      );
+      if (success) {
+        Alert.alert("Éxito", "Datos guardados correctamente en Firebase.");
+      } else {
+        Alert.alert("Error", "Hubo un problema al guardar los datos.");
+      }
     } else {
-      Alert.alert("Error", "Hubo un problema al guardar los datos.");
+      Alert.alert("Error", "Usuario no autenticado.");
     }
   };
 
@@ -154,6 +166,7 @@ const Payment = () => {
 };
 
 export default Payment;
+
 
 const styles = StyleSheet.create({
   container: {

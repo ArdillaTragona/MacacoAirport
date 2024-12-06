@@ -26,13 +26,15 @@ async function saveFlight(flightData) {
  * Guarda los datos de los pasajeros en Firestore.
  * @param {Array} passengers - Lista de pasajeros.
  * @param {String} flightId - ID del vuelo asociado.
+ * @param {String} userId - ID del usuario que creó los datos.
  */
-async function savePassengers(passengers, flightId) {
+async function savePassengers(passengers, flightId, userId) {
   const passengersCollection = collection(db, "passengers");
 
   for (const passenger of passengers) {
     const cleanPassenger = cleanData({
       flightId: flightId,
+      IDUser: userId,
       name: passenger.name,
       lastName: passenger.lastName,
       seat: passenger.selectedSeats,
@@ -46,14 +48,15 @@ async function savePassengers(passengers, flightId) {
  * Guarda los datos del vuelo y los pasajeros distribuidos en colecciones.
  * @param {Object} flightData - Información del vuelo.
  * @param {Array} passengers - Lista de pasajeros.
+ * @param {String} userId - ID del usuario que creó los datos.
  */
-export async function saveFlightDataToFirestore(flightData, passengers) {
+export async function saveFlightDataToFirestore(flightData, passengers, userId) {
   try {
     // Guardar datos del vuelo
-    await saveFlight(flightData);
+    await saveFlight({ ...flightData, IDUser: userId });
 
     // Guardar datos de los pasajeros
-    await savePassengers(passengers, flightData.flightNumber);
+    await savePassengers(passengers, flightData.flightNumber, userId);
 
     console.log("Datos guardados correctamente en Firestore.");
     return true;
