@@ -28,10 +28,10 @@ export default function TabMain() {
         },
 
         tabBarStyle: {
-          //marginBottom: 20,
-          //marginLeft: 20, marginRight: 20,
+        //marginBottom: 20,
+        //marginLeft: 20, marginRight: 20,
 
-          height: 65, // Puedes ajustar la altura según sea necesario
+        height: 65, // Puedes ajustar la altura según sea necesario
         },
       }}
     >
@@ -39,7 +39,7 @@ export default function TabMain() {
         name="TicketScreen"
         component={TicketScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="ticket" size={24} color={color} />
           ),

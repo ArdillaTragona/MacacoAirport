@@ -13,6 +13,7 @@ import SearchScreen from "./components/api/FlightsVuelos";
 import SeatDescription from "./components/headers/SeatDescription";
 import Payment from "./screens/StackFlight/pruebaTicket";
 import SettingScreen from "./screens/TabMain/SettingScreen";
+import TicketScreen from "./screens/TabMain/TicketScreen";
 
 export default function App() {
   return <NavP />;

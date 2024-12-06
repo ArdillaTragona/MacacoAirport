@@ -13,6 +13,7 @@ import {
 import React from "react";
 
 const SettingScreen = () => {
+  
   const configPerfil = [
     { id: "1", icon: "account", text: "Perfil" },
     { id: "2", icon: "account-edit", text: "Edit perfil" },
