@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 15,
-    backgroundColor: "#0D253BFF",
+    backgroundColor: "#F3F3F3FF",
   },
 
   containerRow: {

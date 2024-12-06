@@ -170,7 +170,7 @@ const Passenger = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <View
         style={{
-          backgroundColor: "#0D253BFF",
+          backgroundColor: "#F1F1F1FF",
           justifyContent: "center",
           height: 55,
           paddingLeft: 50,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     padding: 30,
-    backgroundColor: "#0D253BFF",
+    backgroundColor: "#F3F3F3FF",
   },
   containerForm: {
     width: "100%",
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     backgroundColor: "#22B6FA",
+    elevation:5
   },
   input: {
     width: "48%",
