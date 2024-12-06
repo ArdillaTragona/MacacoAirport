@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   contSettings: {
     padding: 20,
-    paddingTop:5
+    paddingTop: 5,
   },
   contOptions: {
     borderRadius: 20,

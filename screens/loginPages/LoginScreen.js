@@ -94,7 +94,7 @@ const LoginScreen = ({ navigation, setIsAuthenticated }) => {
             onBlur={() => setIsFocused(null)}
           />
 
-          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+          {error ? <Text style={{ color: "#064893FF",fontWeight:"bold" }}>{error}</Text> : null}
 
           <TouchableOpacity style={styles.botonLogReg} onPress={handleLogin}>
             <Text style={{ color: "white", fontWeight: "bold", textAlign: "center", fontSize: 15 }}>
