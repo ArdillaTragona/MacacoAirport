@@ -35,7 +35,8 @@ const TicketScreen = () => {
     <View style={styles.contFather}>
       <HeaderHome onRefresh={fetchTickets} />
       <View style={styles.contListTicket}>
-        <Text style={styles.txtEncHistorial}>Historial de Tickets</Text>
+        <Text style={styles.txtEncHistorial}>Ticket history
+        </Text>
         <SectionList
           sections={ticketData.map((group) => ({
             fecha: group.date,
