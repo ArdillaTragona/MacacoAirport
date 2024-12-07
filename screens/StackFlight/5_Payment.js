@@ -127,12 +127,12 @@ const Payment = () => {
         user.uid
       );
       if (success) {
-        Alert.alert("Éxito", "Datos guardados correctamente en Firebase.");
+        Alert.alert("success", "purchased tickets.");
       } else {
-        Alert.alert("Error", "Hubo un problema al guardar los datos.");
+        Alert.alert("Error", "There was a problem saving data.");
       }
     } else {
-      Alert.alert("Error", "Usuario no autenticado.");
+      Alert.alert("Error", "Unauthenticated user.");
     }
   };
 
@@ -159,7 +159,7 @@ const Payment = () => {
         }
       />
       <View style={styles.buttonContainer}>
-        <Button title="BOTON CHILL DE COJONES" onPress={handleSaveToFirebase} />
+        <Button title="CONFIRM PURCHASE" onPress={handleSaveToFirebase} />
       </View>
     </View>
   );
