@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../../credenciales"; // Importa las credenciales y Firebase
@@ -7,6 +14,11 @@ import { getDoc, doc } from "firebase/firestore"; // Para leer los datos de Fire
 
 const SettingScreen = () => {
   const [userData, setUserData] = useState({ name: "", email: "" });
+  const navigation = useNavigation();
+
+  const handleNavigation = (screenName) => {
+    navigation.navigate(screenName); // Navegar a la pantalla correspondiente
+  };
 
   const configPerfil = [
     { id: "1", icon: "account", text: "Perfil" },
@@ -32,21 +44,23 @@ const SettingScreen = () => {
     if (currentUser) {
       // Consultar los datos adicionales del usuario en Firestore
       const userRef = doc(db, "users", currentUser.uid);
-      getDoc(userRef).then((documentSnapshot) => {
-        if (documentSnapshot.exists()) {
-          const userData = documentSnapshot.data();
-          console.log("User Data from Firestore:", userData); // Agregar un log para ver los datos
-  
-          setUserData({
-            username: userData.username || "No Username", // Usar username
-            email: currentUser.email || "No Email", // Usar el correo del usuario
-          });
-        } else {
-          console.log("No such document!");
-        }
-      }).catch((error) => {
-        console.log("Error getting document:", error);
-      });
+      getDoc(userRef)
+        .then((documentSnapshot) => {
+          if (documentSnapshot.exists()) {
+            const userData = documentSnapshot.data();
+            console.log("User Data from Firestore:", userData); // Agregar un log para ver los datos
+
+            setUserData({
+              username: userData.username || "No Username", // Usar username
+              email: currentUser.email || "No Email", // Usar el correo del usuario
+            });
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
     }
   }, []);
 
@@ -94,7 +108,11 @@ const SettingScreen = () => {
             data={configPerfil}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <ConfigItem icon={item.icon} text={item.text} />
+              <ConfigItem
+                icon={item.icon}
+                text={item.text}
+                onPress={handleNavigation(item.text)}
+              />
             )}
           />
         </View>
@@ -105,7 +123,10 @@ const SettingScreen = () => {
             data={configPaymentMethod}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <ConfigItem icon={item.icon} text={item.text} />
+              <ConfigItem
+                icon={item.icon}
+                text={item.text}
+              />
             )}
           />
         </View>
@@ -116,7 +137,10 @@ const SettingScreen = () => {
             data={configApplication}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <ConfigItem icon={item.icon} text={item.text} />
+              <ConfigItem
+                icon={item.icon}
+                text={item.text}
+              />
             )}
           />
         </View>
@@ -126,9 +150,9 @@ const SettingScreen = () => {
   );
 };
 
-const ConfigItem = ({ icon, text }) => {
+const ConfigItem = ({ icon, text, onPress }) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.rowOpcion}>
         <MaterialCommunityIcons name={icon} size={30} color="#546F80FF" />
         {/* Asegúrate de que el texto esté dentro del componente <Text> */}

@@ -9,6 +9,7 @@ import TicketScreen from "../../screens/TabMain/TicketScreen";
 import SettingScreen from "../../screens/TabMain/SettingScreen";
 import HomeHeader from "../headers/HomeHeader";
 import NavFlight from "./NavFlight";
+import NavSetting from "./NavSetting";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,10 +29,10 @@ export default function TabMain() {
         },
 
         tabBarStyle: {
-        //marginBottom: 20,
-        //marginLeft: 20, marginRight: 20,
+          //marginBottom: 20,
+          //marginLeft: 20, marginRight: 20,
 
-        height: 65, // Puedes ajustar la altura según sea necesario
+          height: 65, // Puedes ajustar la altura según sea necesario
         },
       }}
     >
@@ -52,7 +53,7 @@ export default function TabMain() {
         component={NavFlight}
         options={{
           headerShown: true,
-          header:()=><HomeHeader/>,
+          header: () => <HomeHeader />,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="airplane" size={size} color={color} />
           ),
@@ -62,7 +63,7 @@ export default function TabMain() {
 
       <Tab.Screen
         name="Settings"
-        component={SettingScreen}
+        component={NavSetting}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
